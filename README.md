@@ -6,7 +6,8 @@ Docker image for deployment of Apolline software stack.
 
 Build the image using :
 
-```docker build --tag apollinedocker:1.0 .
+```
+docker build --tag apollinedocker:1.0 .
 ```
 
 ## Preparing volumes
@@ -15,7 +16,8 @@ The image requires three volumes to store persistently the InfluxDB, Grafana and
 
 Build them using :
 
-```docker volume create grafana-storage
+```
+docker volume create grafana-storage
 docker volume create influxdb-storage
 docker volume create chronograf-storage
 ```
@@ -24,7 +26,8 @@ docker volume create chronograf-storage
 
 The image can be run using :
 
-```docker run -p 8888:8888 -p 3000:3000 -p 80:80 --mount source=influxdb-storage,target=/var/lib/influxdb/ --mount source=grafana-storage,target=/var/lib/grafana --mount source=chronograf-storage,target=/var/lib/chronograf -it apollinedocker:1.0 /root/apolline/run.sh
+```
+docker run -p 8888:8888 -p 3000:3000 -p 80:80 --mount source=influxdb-storage,target=/var/lib/influxdb/ --mount source=grafana-storage,target=/var/lib/grafana --mount source=chronograf-storage,target=/var/lib/chronograf -it apollinedocker:1.0 /root/apolline/run.sh
 ```
 
 A `start.sh` script is provided as a shortcut.
