@@ -20,18 +20,12 @@ services:
       - GF_SERVER_DOMAIN=localhost
       - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
-    ports:
-      - "127.0.0.1:3000:3000"
   influxdb:
     image: influxdb:1.8.0-alpine
     volumes:
       - ./influxdb:/var/lib/influxdb
-    ports:
-      - "127.0.0.1:8086:8086"
   chronograf:
     image: chronograf:1.8.4-alpine
     volumes:
       - ./chronograf:/var/lib/chronograf
     command: "chronograf --host 0.0.0.0 --port 8888 --basepath /admin -b /var/lib/chronograf/chronograf-v1.db"
-    ports:
-      - "127.0.0.1:8888:8888"
