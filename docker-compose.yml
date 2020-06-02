@@ -1,7 +1,7 @@
 version: "3"
 services:
   nginx:
-    image: nginx
+    image: nginx:1.19.0-alpine
     volumes:
       - ./nginx:/etc/nginx/conf.d
     ports:
@@ -11,7 +11,7 @@ services:
       - influxdb
       - chronograf
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:7.0.1
     volumes:
       - ./grafana:/var/lib/grafana
     environment:
@@ -23,13 +23,13 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
   influxdb:
-    image: influxdb
+    image: influxdb:1.8.0-alpine
     volumes:
       - ./influxdb:/var/lib/influxdb
     ports:
       - "127.0.0.1:8086:8086"
   chronograf:
-    image: chronograf
+    image: chronograf:1.8.4-alpine
     volumes:
       - ./chronograf:/var/lib/chronograf
     command: "chronograf --host 0.0.0.0 --port 8888 --basepath /admin -b /var/lib/chronograf/chronograf-v1.db"
