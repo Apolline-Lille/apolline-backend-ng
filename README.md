@@ -27,7 +27,7 @@ docker volume create chronograf-storage
 The image can be run using :
 
 ```
-docker run -p 8888:8888 -p 3000:3000 -p 80:80 --mount source=influxdb-storage,target=/var/lib/influxdb/ --mount source=grafana-storage,target=/var/lib/grafana --mount source=chronograf-storage,target=/var/lib/chronograf -it apollinedocker:1.0 /root/apolline/run.sh
+docker run -p 80:80 --mount source=influxdb-storage,target=/var/lib/influxdb/ --mount source=grafana-storage,target=/var/lib/grafana --mount source=chronograf-storage,target=/var/lib/chronograf --name "Apolline" -d apollinedocker:1.0
 ```
 
 A `start.sh` script is provided as a shortcut.
