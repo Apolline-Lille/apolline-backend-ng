@@ -1,0 +1,37 @@
+version: "3"
+services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "127.0.0.1:80:80"
+    depends_on:
+      - grafana
+      - influxdb
+      - chronograf
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SERVER_PROTOCOL=http
+      - GF_SERVER_HTTP_PORT=3000
+      - GF_SERVER_DOMAIN=localhost
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    ports:
+      - "127.0.0.1:3000:3000"
+  influxdb:
+    image: influxdb
+    volumes:
+      - ./influxdb:/var/lib/influxdb
+    ports:
+      - "127.0.0.1:8086:8086"
+  chronograf:
+    image: chronograf
+    volumes:
+      - ./chronograf:/var/lib/chronograf
+    command: "chronograf --host 0.0.0.0 --port 8888 --basepath /admin -b /var/lib/chronograf/chronograf-v1.db"
+    ports:
+      - "127.0.0.1:8888:8888"
