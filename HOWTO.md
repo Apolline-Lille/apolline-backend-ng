@@ -25,7 +25,7 @@ This is a known bug, as stated on the InfluxDB website :
 
 ### Giving rights through CURL (recommended)
 To correctly grant access rights on the database, use this workaround command in a command line interface to grant access rights on the `apolline` database to the user `demo` (change `demo` with the user name you just created).
-`curl -XPOST "http://localhost:80/query?u=admin&p=admin" --data-urlencode "q=GRANT ALL ON apolline TO demo"`
+`curl -XPOST "http://localhost:80/query?u=admin&p=admin" --data-urlencode "q=GRANT WRITE ON apolline TO demo"`
 
 ![CURL](/howto_resources/gp_curl_1.png)
 
@@ -33,25 +33,6 @@ Now this command will work out of the box on most Linux and macOS systems. On Wi
 
 ### Giving administrative rights (not recommended)
 If you don't want to use curl, you can use Chronograf's `InfluxDB Admin`/`Users` tab to grant `ALL` permission on the newly-created user, which will effectively give administrative rights onto the whole InfluxDB.
-
-## Changing Grafana data source
-Now that we have a new user, we might want to setup Grafana so that the default data source uses our newly-created user instead of the default administrative one.
-
-Open http://localhost/grafana.
-
-On the left panel, click `Configuration`/`Data sources`.
-
-![Grafana Data Sources](/howto_resources/gp_datasource_1.png)
-
-Click `InfluxDB - Apolline`.
-
-At the bottom of the page, replace `admin` with the newly-created user's name. Click `Reset` and type the user's password. 
-
-![Grafana Data Sources](/howto_resources/gp_datasource_2.png)
-
-Finally, click `Save & Test` to ensure the database is working as intended.
-
-![Grafana Data Sources](/howto_resources/gp_datasource_3.png)
 
 # Sending data to InfluxDB
 ## Configure Apolline-Alpha app
