@@ -40,6 +40,7 @@ Now that we have a new user, we might want to setup Grafana so that the default 
 Open http://localhost/grafana.
 
 On the left panel, click `Configuration`/`Data sources`.
+
 ![Grafana Data Sources](/howto_resources/gp_datasource_1.png)
 
 Click `InfluxDB - Apolline`.
@@ -68,7 +69,7 @@ Tap `Capteur`. Wait for a while, and the app should start getting data from the 
 ![App configuration](/howto_resources/ca_conf_3.png)
 
 # Visualizing data in Grafana
-The InfluxDB database now gets data from the phone, but we need to visualize them. We will use Grafa to that end.
+The InfluxDB database now gets data from the phone, but we need to visualize them. We will use Grafana to that end.
 ## Creating a dashboard
 Open Grafana at http://localhost/grafana.
 
