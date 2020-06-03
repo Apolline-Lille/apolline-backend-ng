@@ -2,8 +2,11 @@
 Type in `docker-compose up`in the folder where docker_compose.yml lies.
 
 The backend will start, and shortly after expose all required services on port 80.
-# Good practices
-This step is not mandatory, but is highly recommended as a fine-tuned user management usually avoids a lot of various problems.
+
+# User management
+This step is not mandatory, and should be followed ONLY if you want to create different user than the ones bundled with the backend.
+
+The backend already provides a `grafana` user with read rights for Grafana, and a `apollineapp` user with write rights for the Android application.
 
 ## Creating a new user
 Go to http://localhost/admin, which will open the Chronograf tool.
@@ -35,7 +38,7 @@ Now this command will work out of the box on most Linux and macOS systems. On Wi
 If you don't want to use curl, you can use Chronograf's `InfluxDB Admin`/`Users` tab to grant `ALL` permission on the newly-created user, which will effectively give administrative rights onto the whole InfluxDB.
 
 # Sending data to InfluxDB
-## Configure Apolline-Alpha app
+## Configure Apolline-Alpha app (not required if you did not change User configuration in step 1)
 Open the Apolline-Alpha Android app on your phone. Tap `Configuration` and set `Address`, `User` and `Pass` to your backend's settings.
 
 ![App configuration](/howto_resources/ca_conf_1.png)
