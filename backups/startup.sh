@@ -17,7 +17,6 @@ fi
 
 # Start cron job
 echo Adding crontab entries
-echo "* * * * * run-parts /etc/periodic/15min" >> /etc/crontabs/root
 
 echo Crontab rules:
 crontab -l
