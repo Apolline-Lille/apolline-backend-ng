@@ -24,8 +24,25 @@ services:
     image: influxdb:1.8.0-alpine
     volumes:
       - ./influxdb:/var/lib/influxdb
+    environment:
+      - INFLUXDB_BIND_ADDRESS=0.0.0.0:8088
   chronograf:
     image: chronograf:1.8.4-alpine
     volumes:
       - ./chronograf:/var/lib/chronograf
     command: "chronograf --host 0.0.0.0 --port 8888 --basepath /admin -b /var/lib/chronograf/chronograf-v1.db"
+  backup:
+    image: influxdb:1.8.0-alpine
+    volumes:
+      - ./backups/crontab/daily:/etc/periodic/daily/:ro
+      - ./backups/storage:/var/lib/backups/
+      - ./backups/startup.sh:/usr/local/startup.sh:ro
+      - ./backups/ssh:/root/.ssh
+    environment:
+      - BACKUP_DATABASE=apolline
+      - BACKUP_SSH_REMOTE=no
+      - BACKUP_SSH_USER=remote_user
+      - BACKUP_SSH_PATH=remote_path
+    depends_on:
+      - influxdb
+    command: /usr/local/startup.sh && crond -f -l 8

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Perform remote backup
+influxd backup -portable -database $BACKUP_DATABASE -host influxdb:8088 /var/lib/backups
+
+# Once backup complete, send it over SSH if available
+if [ "$BACKUP_SSH_REMOTE" != "no" ]
+then
+	echo Sending backups over SSH
+	rsync -e "ssh -o StrictHostKeyChecking=no" -avz /var/lib/backups $BACKUP_SSH_USER@$BACKUP_SSH_REMOTE:"$BACKUP_SSH_PATH"
+fi
