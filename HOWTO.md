@@ -38,18 +38,19 @@ Now this command will work out of the box on most Linux and macOS systems. On Wi
 If you don't want to use curl, you can use Chronograf's `InfluxDB Admin`/`Users` tab to grant `ALL` permission on the newly-created user, which will effectively give administrative rights onto the whole InfluxDB.
 
 # Sending data to InfluxDB
-## Configure Apolline-Alpha app
+## Through Apolline-Alpha app
+### Configure Apolline-Alpha app
 Open the Apolline-Alpha Android app on your phone. 
 
-### If you changed user configuration in step 1
+#### If you changed user configuration in step 1
 Tap `Configuration` and set `Address`, `User` and `Pass` to your backend's settings.
 
-### If you did not change user configuration in step 1
+#### If you did not change user configuration in step 1
 Tap `Configuration` and set `Address` to your backend's IP address (http://XXX.XXX.XXX.XXX:80/).
 
 ![App configuration](/howto_resources/ca_conf_1.png)
 
-## Connect to sensor
+### Connect to sensor
 Return to the app's main menu. Tap `Connexion` and select your sensor in the list.
 
 ![App configuration](/howto_resources/ca_conf_2.png)
@@ -57,6 +58,66 @@ Return to the app's main menu. Tap `Connexion` and select your sensor in the lis
 Tap `Capteur`. Wait for a while, and the app should start getting data from the sensor and pushing them to InfluxDB.
 
 ![App configuration](/howto_resources/ca_conf_3.png)
+
+## Through CURL
+
+### General format
+
+You can send CURL requests on http://localhost:80/ to write data to the InfluxDB database.
+
+A CURL request is built as following :
+
+`curl -i -XPOST "http://localhost:80/write?db=<db>&u=<user>&p=<pass>" --data-binary "<measurement>,<tagKey1>=<tagValue>,<tagKey2>=<tagValue>,... <field>=<value>,<field2>=<value>,... <timestamp>"`
+
+Where :
+
+* `<db>` is the database,
+* `<user>`, `<pass>` are the credentials,
+* `<measurement>` is the measurement name,
+* `<tagKey1>=<tagValue>,<tagKey2>=<tagValue>,...` are a list of key-value pairs for tag fields,
+* `<field>=<value>,<field2>=<value>,...` are a list of field-value pairs for standard fields,
+* `<timestamp>` is the timestamp of the value, formatted as a Long value
+
+### Example
+
+`curl -i -XPOST "http://localhost:80/write?db=apolline&u=apollineapp&p=apollineapp" --data-binary 'demo_measurement,tag1=hello,tag2=world value=0.42 1434055562000000000'`
+
+This request writes in the `apolline` database, with user `apollineapp` and password `apollineapp`.
+
+It writes into the measurement `demo_measurement` a new value with :
+* two tags, `tag1` and `tag2` having values `hello` and `world` respectively,
+* one field, `value`, having a value of 0.42,
+* a timestamp of `1434055562000000000`, corresponding to Thursday 11 June 2015 20:46:02 (see https://www.epochconverter.com/ for timestamp to date conversion).
+
+### Seeing the data
+
+We can use the InfluxDB client by connecting it to http://localhost:80 (download it from here : https://portal.influxdata.com/downloads/) :
+
+`influx --host localhost --port 80`
+
+We can then see the value we just pushed onto the database :
+
+```
+> use apolline;
+Using database apolline
+> show measurements;
+name: measurements
+name
+----
+demo_measurement
+> select * from demo_measurement;
+name: demo_measurement
+time                tag1  tag2  value
+----                ----  ----  -----
+1434055562000000000 hello world 0.42
+> show tag keys from demo_measurement;
+name: demo_measurement
+tagKey
+------
+tag1
+tag2
+>
+```
 
 # Visualizing data in Grafana
 The InfluxDB database now gets data from the phone, but we need to visualize them. We will use Grafana to that end.
