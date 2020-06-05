@@ -7,8 +7,34 @@ Docker image for deployment of Apolline software stack.
 The image can be run using :
 
 ```
-docker-compose up
+./apolline.sh up [variant]
 ```
+
+Where `variant` is :
+* nothing, or `default`, for the minimal image running InfluxDB, Grafana, Chronograf and the backup service
+* `jupyter` to start Jupyter as well on `localhost/jupyter`.
+
+## About Jupyter
+
+When the Jupyter container is started, you should see a line looking like this :
+
+```
+jupyter_1     |     To access the notebook, open this file in a browser:
+jupyter_1     |         file:///home/jovyan/.local/share/jupyter/runtime/nbserver-6-open.html
+jupyter_1     |     Or copy and paste one of these URLs:
+jupyter_1     |         http://4c8d73c6658a:8888/jupyter/?token=7ec607b6751f8c268bf11a722c7c4c62d70e52214ff97659
+jupyter_1     |      or http://127.0.0.1:8888/jupyter/?token=7ec607b6751f8c268bf11a722c7c4c62d70e52214ff97659
+```
+
+Just remove `:8888` from the last URL and you should be good to go.
+
+## Users
+
+The following users are preconfigured :
+
+* grafana/grafana : Grafana read-only user
+* jupyter/jupyter : Jupyter read-only user
+* apollineapp/apollineapp : Apolline Alpha Android app write-only user
 
 # Setting up backups
 
