@@ -47,8 +47,9 @@ services:
       - influxdb
     command: /usr/local/startup.sh && crond -f -l 8
   jupyter:
-    image: jupyter/datascience-notebook
+    build: ./jupyter/.
     ports: 
       - "8888:8888"
     volumes:
       - ./jupyter/jupyter_notebook_config.py:/home/jovyan/.jupyter/jupyter_notebook_config.py
+      - ./jupyter/notebooks:/home/jovyan/notebooks
