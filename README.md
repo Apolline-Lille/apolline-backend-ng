@@ -16,17 +16,7 @@ Where `variant` is :
 
 ## About Jupyter
 
-When the Jupyter container is started, you should see a line looking like this :
-
-```
-jupyter_1     |     To access the notebook, open this file in a browser:
-jupyter_1     |         file:///home/jovyan/.local/share/jupyter/runtime/nbserver-6-open.html
-jupyter_1     |     Or copy and paste one of these URLs:
-jupyter_1     |         http://4c8d73c6658a:8888/jupyter/?token=7ec607b6751f8c268bf11a722c7c4c62d70e52214ff97659
-jupyter_1     |      or http://127.0.0.1:8888/jupyter/?token=7ec607b6751f8c268bf11a722c7c4c62d70e52214ff97659
-```
-
-Just remove `:8888` from the last URL and you should be good to go.
+The password required to access http://localhost/jupyter is defaulted to `jupyter`.
 
 ## Users
 
