@@ -1,0 +1,54 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:1.19.0-alpine
+    volumes:
+      - ./nginx/default-jupyter.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - grafana
+      - influxdb
+      - chronograf
+  grafana:
+    image: grafana/grafana:7.0.1
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SERVER_PROTOCOL=http
+      - GF_SERVER_HTTP_PORT=3000
+      - GF_SERVER_DOMAIN=localhost
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+  influxdb:
+    image: influxdb:1.8.0-alpine
+    volumes:
+      - ./influxdb:/var/lib/influxdb
+    environment:
+      - INFLUXDB_BIND_ADDRESS=0.0.0.0:8088
+  chronograf:
+    image: chronograf:1.8.4-alpine
+    volumes:
+      - ./chronograf:/var/lib/chronograf
+    command: "chronograf --host 0.0.0.0 --port 8888 --basepath /admin -b /var/lib/chronograf/chronograf-v1.db"
+  backup:
+    image: influxdb:1.8.0-alpine
+    volumes:
+      - ./backups/crontab/daily:/etc/periodic/daily/:ro
+      - ./backups/storage:/var/lib/backups/
+      - ./backups/startup.sh:/usr/local/startup.sh:ro
+      - ./backups/ssh:/root/.ssh
+    environment:
+      - BACKUP_DATABASE=apolline
+      - BACKUP_SSH_REMOTE=no
+      - BACKUP_SSH_USER=remote_user
+      - BACKUP_SSH_PATH=remote_path
+    depends_on:
+      - influxdb
+    command: /usr/local/startup.sh && crond -f -l 8
+  jupyter:
+    image: jupyter/datascience-notebook
+    ports: 
+      - "8888:8888"
+    volumes:
+      - ./jupyter/jupyter_notebook_config.py:/home/jovyan/.jupyter/jupyter_notebook_config.py

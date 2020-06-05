@@ -3,7 +3,7 @@ services:
   nginx:
     image: nginx:1.19.0-alpine
     volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "80:80"
     depends_on:

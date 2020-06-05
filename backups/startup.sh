@@ -12,7 +12,7 @@ if [ -f "/root/.ssh/id_rsa" ]; then
 	echo Container already has a keypair - skipping
 else
 	echo Container does not have a keypair - generating
-	ssh-keygen -t rsa -f /home/root/.ssh/id_rsa -q -P ""
+	ssh-keygen -t rsa -f /root/.ssh/id_rsa -q -P ""
 fi
 
 # Start cron job
